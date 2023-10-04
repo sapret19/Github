@@ -1,14 +1,19 @@
 package com.hnf.cc.adapter
 
+import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.hnf.cc.activity.DetailActivity
+import com.hnf.cc.api.response.DetailResponse
 import com.hnf.cc.api.response.ItemsItem
 import com.hnf.cc.databinding.ItemUserBinding
 
 class MainAdapter(val dataUser: List<ItemsItem>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+
 
     private var onClickItemCallback: OnClickItemCallback? = null
     fun setOnClickItemCallback(onClickItemCallback: OnClickItemCallback) {
@@ -26,6 +31,8 @@ class MainAdapter(val dataUser: List<ItemsItem>) : RecyclerView.Adapter<MainAdap
                     .centerCrop()
                     .into(imgUser)
                 textUser.text =user.login
+
+
             }
 
         }
@@ -38,8 +45,16 @@ class MainAdapter(val dataUser: List<ItemsItem>) : RecyclerView.Adapter<MainAdap
 
     override fun getItemCount(): Int = dataUser.size
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(dataUser[position])
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, DetailActivity::class.java)
+                intent.putExtra(DetailActivity.USERNAME, dataUser[position].login)
+                intent.putExtra(DetailActivity.AVATAR, dataUser[position].avatarUrl)
+            holder.itemView.context.startActivity(intent)
+        }
     }
     interface OnClickItemCallback {
         fun onClickItem(user: ItemsItem)
