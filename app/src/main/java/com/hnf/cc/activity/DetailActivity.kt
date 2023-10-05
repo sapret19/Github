@@ -3,6 +3,7 @@ package com.hnf.cc.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.annotation.StringRes
+import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hnf.cc.R
@@ -15,11 +16,6 @@ class DetailActivity : AppCompatActivity() {
         const val USERNAME = "username"
         const val AVATAR = "avatar"
 
-        @StringRes
-        private val TAB_TITLES = intArrayOf(
-            R.string.tab_1,
-            R.string.tab_2
-        )
     }
 
     private lateinit var binding: ActivityDetailBinding
@@ -31,6 +27,7 @@ class DetailActivity : AppCompatActivity() {
 
         val username = intent.getStringExtra(USERNAME)
         val avatar = intent.getStringExtra(AVATAR)
+        val bundle = Bundle()
 
         binding.namaUser.text = username
         Glide.with(this)
@@ -38,11 +35,18 @@ class DetailActivity : AppCompatActivity() {
             .centerCrop()
             .into(binding.avatarUser)
 
-        sectionsPagerAdapter = SectionsPagerAdapter(this)
-        binding.viewPager.adapter = sectionsPagerAdapter
-        TabLayoutMediator(binding.profileTab, binding.viewPager){tab, position ->
-            tab.text = resources.getString(TAB_TITLES[position])
-        }.attach()
+//        sectionsPagerAdapter = SectionsPagerAdapter(this)
+//        sectionsPagerAdapter.username = resources.getString(R.string.app_name)
+//        binding.viewPager.adapter = sectionsPagerAdapter
+//        TabLayoutMediator(binding.profileTab, binding.viewPager){tab, position ->
+//            tab.text = resources.getString(TAB_TITLES[position])
+//        }.attach()
+
+        val pagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, bundle)
+            binding.apply {
+                viewPager.adapter = pagerAdapter
+                profileTab.setupWithViewPager(viewPager)
+            }
 
         supportActionBar?.elevation = 0f
     }

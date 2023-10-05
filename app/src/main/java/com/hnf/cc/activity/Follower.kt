@@ -6,33 +6,55 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.hnf.cc.R
+import com.hnf.cc.activity.viewmodel.FollowViewModel
+import com.hnf.cc.adapter.MainAdapter
 import com.hnf.cc.databinding.FragmentFollowerBinding
 
 
-class Follower : Fragment() {
+class Follower : Fragment(R.layout.fragment_follower) {
+    companion object {
+        const val ARG_SECTION_NUMBER = "section_number"
+        const val ARG_USERNAME = "app_name"
+    }
 
     private lateinit var binding: FragmentFollowerBinding
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_follower, container, false)
-    }
+    private lateinit var viewModel: FollowViewModel
+    private lateinit var adapter: MainAdapter
+    private lateinit var username: String
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val tvLabel: TextView = view.findViewById(R.id.section_label)
-        val index = arguments?.getInt(ARG_SECTION_NUMBER, 0)
+        val arguments = arguments
+        username = arguments?.getString(DetailActivity.USERNAME).toString()
 
-        tvLabel.text = getString(R.string.content_tab_text, index)
+        binding = FragmentFollowerBinding.bind(view)
+
+        adapter = MainAdapter(emptyList())
+
+        binding.apply {
+            listFollow.setHasFixedSize(true)
+            listFollow.layoutManager = LinearLayoutManager(activity)
+            listFollow.adapter = adapter
+        }
+
+        viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[FollowViewModel::class.java]
+        viewModel.setFollow(username)
+
+        viewModel.getFollow().observe(viewLifecycleOwner) {
+            if (it != null) {
+                adapter.dataUser
+            }
+        }
+
+        adapter.notifyDataSetChanged()
+
     }
 
-    companion object {
-        const val ARG_SECTION_NUMBER = "section_number"
-    }
+
 
 
 }
