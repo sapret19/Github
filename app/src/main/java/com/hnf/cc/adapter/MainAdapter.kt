@@ -12,7 +12,13 @@ import com.hnf.cc.api.response.DetailResponse
 import com.hnf.cc.api.response.ItemsItem
 import com.hnf.cc.databinding.ItemUserBinding
 
-class MainAdapter(val dataUser: List<ItemsItem>) : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+class MainAdapter() : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
+
+    private var dataUser: List<ItemsItem> = ArrayList()
+
+    constructor(dataUser: List<ItemsItem>) : this() {
+        this.dataUser = dataUser
+    }
 
 
     private var onClickItemCallback: OnClickItemCallback? = null

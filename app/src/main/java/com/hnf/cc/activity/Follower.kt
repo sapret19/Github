@@ -41,14 +41,15 @@ class Follower : Fragment(R.layout.fragment_follower) {
             listFollow.adapter = adapter
         }
 
+        binding.progress.visibility = View.VISIBLE
         viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[FollowViewModel::class.java]
         viewModel.setFollow(username)
 
-        viewModel.getFollow().observe(viewLifecycleOwner) {
-            if (it != null) {
-                adapter.dataUser
-            }
-        }
+//        viewModel.getFollow().observe(viewLifecycleOwner) {
+//            if (it != null) {
+//                adapter.dataUser
+//            }
+//        }
 
         adapter.notifyDataSetChanged()
 
